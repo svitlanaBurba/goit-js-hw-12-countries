@@ -43,19 +43,19 @@ function displayCountry(countryData) {
 }
 
 function displayCountryList(countriesData) {
-  countriesData.forEach(country =>
-    refs.countriesContainer.insertAdjacentHTML(
-      'beforeend',
-      `<li class="country">${country.name}</li>`,
-    ),
-  );
-  refs.countriesContainer.addEventListener('click', displaySelectedCountry);
-  refs.countriesContainer.countriesData = countriesData; // Saving json data on the country list so event handler can access it
+  refs.countriesContainer.innerHTML = countriesData
+    .map(country => `<li class="country">${country.name}</li>`)
+    .join('');
+  refs.countriesContainer.addEventListener('click', event => {
+    displaySelectedCountry(event, countriesData);
+  });
+  //   refs.countriesContainer.countriesData = countriesData; // Saving json data on the country list so event handler can access it
 }
 
-function displaySelectedCountry(event) {
-  refs.countriesContainer.countriesData.forEach(countryData => {
+function displaySelectedCountry(event, countriesData) {
+  countriesData.forEach(countryData => {
     if (countryData.name === event.target.textContent) {
+      refs.searchForm.value = event.target.textContent;
       displayCountry(countryData);
       refs.countriesContainer.innerHTML = '';
     }
